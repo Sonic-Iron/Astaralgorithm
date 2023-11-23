@@ -1,14 +1,6 @@
 
+#include<iostream>
 
-#include <iostream>
-#include <map>
-#include <vector>
-#include <string>
-
-
-
-
-int main()
-{
+int main() {
 
 }
