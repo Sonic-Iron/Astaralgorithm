@@ -6,9 +6,11 @@
 #include <string>
 
 struct vertex {
+    std::string name;
+    vertex(std::string s) : name(s) {}
     typedef std::pair <int, vertex*> ver;
     std::vector <ver> adj;
-    std::string name;
+    
 };
 
 
