@@ -49,7 +49,7 @@ std::vector<node> create_area(const char area_type, const int area_side_length)
 
 	return nodes;
 
-}
+}//This is a comment
 
 
 void run_ASA()
