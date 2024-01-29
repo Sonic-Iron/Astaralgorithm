@@ -61,6 +61,10 @@ int idx2d(const int current_loc, const int direction, const int length_x, const 
 	}
 }
 
+int interpret_costs(const int path_type1, const int path_type2) {
+
+}
+
 std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, const int length_y) //use inline here as it could be put into the create_area function?, it doesn't return anything
 {
 	const int directions[3]{ 1,2,3 };
@@ -83,7 +87,6 @@ std::vector<node> create_area(const char area_type, const int length_x, const in
 	nodes = create_edges(nodes, length_x, length_y); //do i need to return nodes here?
 
 	return nodes;
-
 }
 
 void run_ASA()
