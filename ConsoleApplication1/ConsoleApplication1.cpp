@@ -12,6 +12,7 @@
 #define DIR_SW 5
 #define DIR_W 6
 #define DIR_NW 7
+#define DIR_COUNT 8 
 
 
 struct node
@@ -19,12 +20,12 @@ struct node
 	const int ID;
 	const int type;
 	const char symbol;
+	bool visited = false;
 	std::array<float, DIR_COUNT> edges;
 };
 
 
 int idx2d(const int current_loc, const int delta_x, const int delta_y, const int length_x, const int length_y) //returns the position of a node converted from a 2d space to a 1d vector, y is positive in the positive direction. North is positive
-
 {
 	if(current_loc % length_y + delta_x < 0 || current_loc % length_y + delta_x > length_x) { //check for off the sides
 		return current_loc;
@@ -59,12 +60,19 @@ int idx2d(const int current_loc, const int direction, const int length_x, const 
 	}
 }
 
+int calculate_edge_cost(const int type1, const int type2)
+{
+	return 1; //will update this later, all types of path will have the same length for now
+}
+
 std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, const int length_y) //use inline here as it could be put into the create_area function?, it doesn't return anything
 {
-	const int directions[3]{ 1,2,3 };
-	for (int dir : directions)
+	for (int location = 0; location<nodes.size(); location++)
 	{
-
+		for (int i = 0; i < 8; i++)
+		{
+			nodes[location].edges[i] = 
+		}
 	}
 	return nodes;
 }
@@ -96,12 +104,6 @@ int main()
 	int length_x;
 	int length_y;
 	const int num_people {10};
-	
-	int integers[3] {1,2,3};
-	
-	for (int a : integers) {
-		std::cout << a << std::endl;
-	}
 
 	std::cout << "Type of area (r for rural, s for suburban, and u for urban)" << std::endl;
 	std::cin >> area_type;
