@@ -18,12 +18,12 @@
 struct node
 {
 	const int index;
+	const int pre_index;
 	const int type;
 	const char symbol;
 	bool visited = false;
 	std::array<float, DIR_COUNT> edges;
 };
-
 
 int idx2d(const int current_loc, const int delta_x, const int delta_y, const int length_x, const int length_y) //returns the position of a node converted from a 2d space to a 1d vector, y is positive in the positive direction. North is positive
 {
@@ -37,12 +37,14 @@ int idx2d(const int current_loc, const int delta_x, const int delta_y, const int
 	}
 	return (current_loc + (length_x * delta_y) + delta_x);
 }
+
 int idx2d(const int current_loc, const int direction, const int length_x, const int length_y)
 {
 	switch (direction)
 	{
 	case 0:
 		return idx2d(current_loc, 0, 1, length_x, length_y);
+		//break here? and after all other returns?
 	case 1:
 		return idx2d(current_loc, 1, 1, length_x, length_y);
 	case 2:
@@ -64,6 +66,7 @@ int idx2d(const int current_loc, const int direction, const int length_x, const 
 
 int calculate_edge_cost(const int type1, const int type2)
 {
+
 	return 1; //will update this later, all types of path will have the same length for now
 }
 
@@ -73,10 +76,10 @@ std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, con
 	{
 		for (int i = 0; i < 8; i++)
 		{
-			nodes[location].edges[i] = 
+			nodes.at(location).edges.at(i) = 
 		}
 	}
-	return nodes;
+	return nodes; //since nodes is a reference do I have to return it here? I could have a void function as all this does is modify the nodes vector?
 }
 
 std::vector<node> create_area(const char area_type, const int length_x, const int length_y)
@@ -86,7 +89,7 @@ std::vector<node> create_area(const char area_type, const int length_x, const in
 
 	for (int i = 0; i < (length_x * length_y); i++)
 	{
-		nodes.push_back({ i, 0, '.', {}});
+		nodes.push_back({ i, -1, 0, '.', {}});
 	}
 	nodes = create_edges(nodes, length_x, length_y); //do i need to return nodes here?
 
@@ -112,3 +115,6 @@ int main()
 	std::cout << area_type << length_x << length_y << std::endl;
 	std::vector<node> nodes = create_area(area_type, length_x, length_y);
 }
+
+
+// I know that all the graph creation stuff should be in a header file just it's easier to work on here for now
