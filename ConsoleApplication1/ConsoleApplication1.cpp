@@ -61,7 +61,8 @@ int idx2d(const int current_loc, const int direction, const int length_x, const 
 	}
 }
 
-int interpret_costs(const int path_type1, const int path_type2) {
+int interpret_costs(const int path_type1, const int path_type2) 
+{
 
 }
 
