@@ -20,6 +20,7 @@ struct node
 	const int index;
 	const int type;
 	const char symbol;
+	bool visited = false;
 	std::array<float, DIR_COUNT> edges;
 };
 
@@ -61,17 +62,19 @@ int idx2d(const int current_loc, const int direction, const int length_x, const 
 	}
 }
 
-int interpret_costs(const int path_type1, const int path_type2) 
+int calculate_edge_cost(const int type1, const int type2)
 {
-
+	return 1; //will update this later, all types of path will have the same length for now
 }
 
 std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, const int length_y) //use inline here as it could be put into the create_area function?, it doesn't return anything
 {
-	const int directions[3]{ 1,2,3 };
-	for (int dir : directions)
+	for (int location = 0; location<nodes.size(); location++)
 	{
-
+		for (int i = 0; i < 8; i++)
+		{
+			nodes[location].edges[i] = 
+		}
 	}
 	return nodes;
 }
