@@ -79,7 +79,7 @@ std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, con
 		std::cout << location << std::endl;
 		for (int direction = 0; direction < 8; direction++) //same reason here, nodes struct uses int not type_t, or should I just convert? Or should it be done implicitly?
 		{
-			size_t new_location = idx2d(location, direction, length_x, length_y); //returns an int until it knows it is a safe value to cast to size_t
+			int new_location = idx2d(location, direction, length_x, length_y); //returns an int until it knows it is a safe value to cast to size_t
 			if (new_location < 0)
 			{
 				nodes.at(location).edges.at(direction) = (std::numeric_limits<int>::max(), new_location); //I assume the complier will optimise and change this to -1? Also is there a way to do this without using another include? Does it matter?
