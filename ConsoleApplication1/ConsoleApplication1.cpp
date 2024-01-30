@@ -17,8 +17,8 @@
 
 struct node
 {
-	const int index;
-	const int pre_index;
+	const int location_index;
+	int pre_index;
 	const int type;
 	const char symbol;
 	bool visited = false;
@@ -81,7 +81,7 @@ std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, con
 			{
 				return std::vector<node>(); //returns an anonymous object? there is no lvalue here so is it safe?
 			}
-			nodes.at(location).edges.at(location, direction, length_x, length_y) = calculate_edge_cost(nodes[location].type, nodes[new_location].type);
+			nodes.at(location).edges.at(location, direction, length_x, length_y) = (calculate_edge_cost(nodes[location].type, nodes[new_location].type), new_location);
 		}
 	}
 	return nodes; //since nodes is a reference do I have to return it here? I could have a void function as all this does is modify the nodes vector?
@@ -94,7 +94,8 @@ std::vector<node> create_area(const char area_type, const int length_x, const in
 
 	for (int i = 0; i < (length_x * length_y); i++)
 	{
-		nodes.push_back({ i, -1, 0, '.', {}});
+		nodes.push_back({i, -1, 0, '.', {}}); //TODO: sort this out lol
+		//create the areas here I guess
 	}
 	nodes = create_edges(nodes, length_x, length_y); //do i need to return nodes here?
 
