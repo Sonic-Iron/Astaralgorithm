@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <limits>
 
 
 #define DIR_N 0
@@ -19,27 +20,27 @@ struct node
 {
 	//When to put a constructor here?
 	const size_t location_index;
-	int pre_index;
+	size_t pre_location_index;
 	const int type;
 	const char symbol;
-	bool visited = false;
+	bool visited;
 	std::array<std::pair<int,int>, DIR_COUNT> edges;
 };
 
-size_t idx2d(const int current_loc, const int delta_x, const int delta_y, const int length_x, const int length_y) //returns the position of a node converted from a 2d space to a 1d vector, y is positive in the positive direction. North is positive
+int idx2d(const int current_loc, const int delta_x, const int delta_y, const int length_x, const int length_y) //returns the position of a node converted from a 2d space to a 1d vector, y is positive in the positive direction. North is positive
 {
 	if(current_loc % length_y + delta_x < 0 || current_loc % length_y + delta_x > length_x) 
 	{ //check for off the sides
-		return current_loc;
+		return -1;
 	}
 	if(current_loc + length_x * delta_y < 0 || current_loc + length_x * delta_y > length_x * length_y)
 	{ //check for off the top/bottom
-		return current_loc;
+		return -1;
 	}// Should I check for out of bounds here or use a try/catch and throw?
 	return (current_loc + (length_x * delta_y) + delta_x);
 }
 
-size_t idx2d(const int current_loc, const int direction, const int length_x, const int length_y)
+int idx2d(const int current_loc, const int direction, const int length_x, const int length_y)
 {
 	switch (direction)
 	{
@@ -78,16 +79,16 @@ std::vector<node> create_edges(std::vector<node>& nodes, const int length_x, con
 		std::cout << location << std::endl;
 		for (int direction = 0; direction < 8; direction++) //same reason here, nodes struct uses int not type_t, or should I just convert? Or should it be done implicitly?
 		{
-			size_t new_location = idx2d(location, direction);
-			if (new_location == location)
+			size_t new_location = idx2d(location, direction, length_x, length_y); //returns an int until it knows it is a safe value to cast to size_t
+			if (new_location < 0)
 			{
-				return std::vector<node>(); //returns an anonymous object? there is no lvalue here so is it safe?
+				nodes.at(location).edges.at(direction) = (std::numeric_limits<int>::max(), new_location); //I assume the complier will optimise and change this to -1? Also is there a way to do this without using another include? Does it matter?
 			}
-			if (nodes.at(new_location).location_index != new_location)
+			else
 			{
-				return std::vector<node>();
+				nodes.at(location).edges.at(direction) = (calculate_edge_cost(nodes.at(location).type, nodes.at(new_location).type), new_location);
 			}
-			nodes.at(location).edges.at(direction) = (calculate_edge_cost(nodes.at(location).type, nodes.at(new_location).type), new_location);
+
 		}
 	}
 	return nodes; //since nodes is a reference do I have to return it here? I could have a void function as all this does is modify the nodes vector?
@@ -100,7 +101,7 @@ std::vector<node> create_area(const char area_type, const int length_x, const in
 
 	for (size_t i = 0; i < (length_x * length_y); i++)
 	{
-		nodes.push_back({i, -1, 0, '.', {}}); //TODO: sort this out lol //also instead of pushback use assignment, i.e. nodes[i]/nodes.at(i) = {i, ...}
+		nodes.push_back({i, i, 0, '.', false, {}}); //TODO: sort this out lol //also instead of pushback use assignment, i.e. nodes[i]/nodes.at(i) = {i, ...}
 		//create the areas here I guess
 	}
 	nodes = create_edges(nodes, length_x, length_y); //do i need to return nodes here?
@@ -136,3 +137,4 @@ int main()
 
 
 // I know that all the graph creation stuff should be in a header file just it's easier to work on here for now
+// Is it safe to returns anonomous objects?
